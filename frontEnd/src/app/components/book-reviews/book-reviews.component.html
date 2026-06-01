@@ -1,0 +1,203 @@
+<!-- ── Reviews List ── -->
+@if (isLoading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-gold" role="status"></div>
+  </div>
+} @else if (reviews().length === 0) {
+  <div class="text-center py-5">
+    <i
+      class="bi bi-chat-square-text fs-1 text-brand-gray mb-3 d-block"
+      style="opacity: 0.3"
+    ></i>
+    <h5 class="fw-bold mb-2">No reviews yet</h5>
+    <p class="text-brand-gray">Be the first to leave a review</p>
+  </div>
+} @else {
+  <!-- Summary -->
+  <div
+    class="d-flex align-items-center gap-3 mb-4 p-3 rounded-3 bg-warm border border-brand"
+  >
+    <div class="text-center">
+      <div
+        style="
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: var(--gold);
+          line-height: 1;
+        "
+      >
+        {{ averageRating().toFixed(1) }}
+      </div>
+      <div class="d-flex gap-1 justify-content-center mt-1">
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <i
+            class="bi"
+            [class.bi-star-fill]="star <= averageRating()"
+            [class.bi-star]="star > averageRating()"
+            style="color: var(--gold); font-size: 0.8rem"
+          ></i>
+        }
+      </div>
+      <div class="text-brand-gray" style="font-size: 0.78rem">
+        {{ reviews().length }} reviews
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Cards -->
+  @for (review of reviews(); track review.reviewDate) {
+    <div class="review-card mb-3" style="position: relative">
+      <div class="d-flex align-items-start gap-3">
+        <!-- Avatar -->
+        <div
+          class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+          style="
+            width: 42px;
+            height: 42px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+          "
+          [style.background]="getAvatarColor(review.displayName)"
+        >
+          {{ getInitials(review.displayName) }}
+        </div>
+        <div class="flex-grow-1">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+          >
+            <div>
+              <span class="fw-bold" style="font-size: 0.95rem">{{
+                review.displayName
+              }}</span>
+              <div class="d-flex gap-1 mt-1">
+                @for (star of [1, 2, 3, 4, 5]; track star) {
+                  <i
+                    class="bi"
+                    [class.bi-star-fill]="star <= review.rating"
+                    [class.bi-star]="star > review.rating"
+                    style="color: var(--gold); font-size: 0.78rem"
+                  ></i>
+                }
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-brand-gray" style="font-size: 0.78rem">{{
+                formatDate(review.reviewDate)
+              }}</span>
+              <!-- Delete button - only show for review owner -->
+              @if (isLoggedIn() && review.userId === currentUserId()) {
+                <button
+                  (click)="deleteReview(review.reviewId)"
+                  title="Delete review"
+                  style="
+                    position: absolute;
+                    bottom: 12px;
+                    right: 12px;
+                    background: none;
+                    border: 1px solid #dc3545;
+                    color: #dc3545;
+                    border-radius: 6px;
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    font-size: 0.85rem;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="
+                    this.style.background = '#dc3545';
+                    this.style.color = '#fff';
+                  "
+                  onmouseout="
+                    this.style.background = 'none';
+                    this.style.color = '#dc3545';
+                  "
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              }
+            </div>
+            <span class="text-brand-gray" style="font-size: 0.78rem">{{
+              formatDate(review.reviewDate)
+            }}</span>
+          </div>
+          <p class="mt-2 mb-0 text-brand-gray lh-lg" style="font-size: 0.9rem">
+            {{ review.reviewText }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+}
+
+<!-- ── Add Review Form ── -->
+<div class="mt-4 pt-4 border-top border-brand">
+  @if (!isLoggedIn()) {
+    <div class="text-center py-4 rounded-3 bg-warm border border-brand">
+      <i class="bi bi-lock fs-4 text-gold d-block mb-2"></i>
+      <p class="mb-0 text-brand-gray">
+        Please <strong>log in</strong> to leave a review
+      </p>
+    </div>
+  } @else {
+    <h6
+      class="fw-bold mb-3"
+      style="font-family: &quot;Playfair Display&quot;, serif"
+    >
+      Write a Review
+    </h6>
+
+    <!-- Star Rating Picker -->
+    <div class="mb-3">
+      <label class="form-label-sm d-block mb-2">Your Rating</label>
+      <div class="d-flex gap-2">
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <i
+            class="bi cursor-pointer"
+            [class.bi-star-fill]="star <= (hoveredStar() || newRating())"
+            [class.bi-star]="star > (hoveredStar() || newRating())"
+            style="font-size: 1.6rem; cursor: pointer; transition: color 0.15s"
+            [style.color]="
+              star <= (hoveredStar() || newRating())
+                ? 'var(--gold)'
+                : 'var(--brand-muted)'
+            "
+            (mouseenter)="hoveredStar.set(star)"
+            (mouseleave)="hoveredStar.set(0)"
+            (click)="newRating.set(star)"
+          >
+          </i>
+        }
+      </div>
+    </div>
+
+    <!-- Review Text -->
+    <div class="mb-3">
+      <label class="form-label-sm d-block mb-2">Your Review</label>
+      <textarea
+        class="form-control-custom w-100"
+        rows="4"
+        placeholder="Share your thoughts about this book..."
+        [value]="newReviewText()"
+        (input)="newReviewText.set($any($event.target).value)"
+      >
+      </textarea>
+    </div>
+
+    <button
+      class="btn-gold-cust"
+      [disabled]="isSubmitting() || !newRating() || !newReviewText().trim()"
+      (click)="submitReview()"
+    >
+      @if (isSubmitting()) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Submitting...
+      } @else {
+        <i class="bi bi-send me-2"></i> Submit Review
+      }
+    </button>
+  }
+</div>

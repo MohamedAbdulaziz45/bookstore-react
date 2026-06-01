@@ -1,0 +1,69 @@
+# ============================================================================
+# Frontend / Angular
+# ============================================================================
+frontEnd/node_modules/
+frontEnd/dist/
+frontEnd/.angular/
+frontEnd/tmp/
+frontEnd/out-tsc/
+frontEnd/coverage/
+
+# Keep Angular environment files tracked unless they contain no secrets.
+# Anything shipped to the frontend is public, so do not put API keys or secrets there.
+
+# ============================================================================
+# Frontend / React
+# ============================================================================
+react-frontend/node_modules/
+react-frontend/dist/
+react-frontend/coverage/
+
+# ============================================================================
+# Backend / .NET
+# ============================================================================
+backEnd/**/bin/
+backEnd/**/obj/
+backEnd/**/TestResults/
+backEnd/**/coverage/
+
+# User-specific Visual Studio / .NET files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+backEnd/BookStoreApi/BookStoreApi/BookStoreApi.http
+
+# ============================================================================
+# Secrets and local-only configuration
+# ============================================================================
+backEnd/**/appsettings.Development.json
+backEnd/**/appsettings.Local.json
+backEnd/**/appsettings.*.local.json
+.env
+.env.*
+!.env.example
+
+# ============================================================================
+# Logs
+# ============================================================================
+*.log
+backEnd/BookStoreApi/BookStoreApi/Logs/
+
+# ============================================================================
+# IDEs / editors
+# ============================================================================
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+.zed/
+
+# ============================================================================
+# OS files
+# ============================================================================
+.DS_Store
+Thumbs.db

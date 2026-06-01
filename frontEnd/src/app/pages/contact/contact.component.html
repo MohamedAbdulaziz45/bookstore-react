@@ -1,0 +1,94 @@
+<app-cart-sidebar></app-cart-sidebar>
+<app-header></app-header>
+<app-page-banner title="Contact Us"
+  subtitle="We'd love to hear from you. Get in touch with our team.">
+</app-page-banner>
+
+<section class="section-py bg-brand">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Left – contact info -->
+      <div class="col-lg-4">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="section-title mb-4">We'd Love to Hear From You</h2>
+
+        @for (info of contactInfo; track info.heading) {
+          <div class="contact-info-card d-flex align-items-start gap-3 mb-4">
+            <div class="ci-icon">
+              <i [class]="'bi ' + info.icon"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-1" style="font-family:'Lato',sans-serif">{{ info.heading }}</h6>
+              <p class="text-brand-gray small mb-0">{{ info.detail }}</p>
+            </div>
+          </div>
+        }
+
+        <h6 class="fw-bold mt-4 mb-3" style="font-family:'Lato',sans-serif">Follow Us</h6>
+        <div class="d-flex gap-2">
+          @for (s of socials; track s.icon) {
+            <a href="#" class="contact-social-btn" [attr.aria-label]="s.label">
+              <i [class]="'bi ' + s.icon"></i>
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- Right – form -->
+      <div class="col-lg-8">
+        <div class="bg-white rounded-3 p-4 p-lg-5 shadow-sm border border-brand">
+          <h3 class="fw-bold mb-4" style="font-family:'Lato',sans-serif">Send a Message</h3>
+
+          @if (sent()) {
+            <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Your message has been sent! We'll get back to you soon.</span>
+            </div>
+          }
+
+          <form (submit)="onSubmit($event)">
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold small">Name</label>
+                <input type="text" [(ngModel)]="form.name" name="name" required
+                       class="form-control" placeholder="Your name" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold small">Email</label>
+                <input type="email" [(ngModel)]="form.email" name="email" required
+                       class="form-control" placeholder="Your email" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Subject</label>
+              <input type="text" [(ngModel)]="form.subject" name="subject"
+                     class="form-control" placeholder="Subject" />
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-semibold small">Message</label>
+              <textarea [(ngModel)]="form.message" name="message" required rows="6"
+                        class="form-control" placeholder="Your message…"></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold btn-lg px-5 fw-bold text-uppercase">
+              <i class="bi bi-send me-2"></i>Submit
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Map placeholder -->
+<div class="bg-warm d-flex align-items-center justify-content-center border-top border-bottom border-brand"
+     style="height:280px">
+  <div class="text-center">
+    <i class="bi bi-map d-block mb-2" style="font-size:3rem;color:var(--gold);opacity:.5"></i>
+    <p class="text-brand-gray fw-semibold mb-0">1569 2nd Ave, New York, NY 10028, USA</p>
+  </div>
+</div>
+
+<app-newsletter-section></app-newsletter-section>
+<app-footer></app-footer>

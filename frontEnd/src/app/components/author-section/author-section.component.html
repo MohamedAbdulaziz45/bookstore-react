@@ -1,0 +1,60 @@
+<section class="section-py bg-warm">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <!-- Image -->
+      <div class="col-lg-5">
+        <div class="split-img">
+          <a [routerLink]="['/author', id, toSlug(name || '')]">
+            <img [src]="image" [alt]="name" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="col-lg-7">
+        @if (IsFallBack) {
+          <span class="section-label">Author Spotlight</span>
+        } @else {
+          <span class="section-label">Author of the Month</span>
+        }
+        <h2 class="section-title mb-3">{{ name }}</h2>
+        <p class="text-brand-gray lh-lg mb-4">{{ bio }}</p>
+
+        <h6
+          class="fw-bold mb-3"
+          style="font-family: &quot;Lato&quot;, sans-serif"
+        >
+          Featured Works
+        </h6>
+
+        @for (book of authorBooks(); track book.id) {
+          <div
+            class="d-flex align-items-center gap-3 py-3 border-bottom border-brand"
+          >
+            @if (book.image) {
+              <a [routerLink]="['/book', book.id, toSlug(book.title)]">
+                <img
+                  [src]="book.image"
+                  [alt]="book.title"
+                  class="rounded flex-shrink-0"
+                  style="width: 48px; height: 62px; object-fit: cover"
+                />
+              </a>
+            }
+            <span class="fw-semibold flex-grow-1" style="font-size: 0.95rem">{{
+              book.title
+            }}</span>
+            <span class="text-gold fw-bold small">{{ book.price }}</span>
+          </div>
+        }
+
+        <a
+          [routerLink]="['/author', id, toSlug(name || '')]"
+          class="btn btn-gold btn-lg px-5 text-uppercase fw-bold mt-4"
+        >
+          Read More
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<section class="section-py bg-warm">
+  <div class="container-fluid px-2">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Choose By Category</h2>
+      <p class="text-brand-gray mt-2 mx-auto" style="max-width: 520px">
+        Explore our diverse collection organised by genre and interest
+      </p>
+    </div>
+
+    <div class="row g-2">
+      @for (cat of categories; track cat.genreName; let i = $index) {
+        <!-- First 3 normal, 4th wide, last 2 normal -->
+        <div [class]="i === 3 ? 'col-12 col-md-8' : 'col-6 col-md-4'">
+          <a
+            class="category-card d-block text-decoration-none"
+            style="height: 260px"
+            [routerLink]="['/genres', cat.genreId, toSlug(cat.genreName)]"
+          >
+            <img [src]="cat.imgUrl" [alt]="cat.genreName" loading="lazy" />
+            <div class="cat-overlay">
+              <p class="cat-name px-3">{{ cat.genreName }}</p>
+              @if (cat.count) {
+                <small class="text-white-50 mt-1">{{ cat.count }} books</small>
+              }
+            </div>
+          </a>
+        </div>
+      }
+    </div>
+
+    <div class="text-center mt-5">
+      <a
+        routerLink="/genres"
+        class="btn btn-gold btn-lg px-5 text-uppercase fw-bold"
+      >
+        See All Categories
+      </a>
+    </div>
+  </div>
+</section>

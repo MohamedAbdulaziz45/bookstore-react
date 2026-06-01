@@ -1,0 +1,131 @@
+<h2 class="section-title mb-4">{{ title }}</h2>
+<!-- Toolbar -->
+<div
+  class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between mb-4 gap-3"
+>
+  <p class="mb-0 text-brand-gray">
+    Showing
+    <strong style="color: var(--brand-dark)">{{ totalCount() }}</strong> results
+  </p>
+  <div class="d-flex align-items-center gap-2">
+    <label class="mb-0 small fw-bold" style="color: var(--brand-dark)"
+      >Sort by:</label
+    >
+    <select
+      class="form-select form-select-sm"
+      style="width: auto"
+      (change)="onSortChange($any($event.target).value)"
+    >
+      <option value="default">Default sorting</option>
+      <option value="Title_asc">Title A–Z</option>
+      <option value="Price_asc">Price: Low → High</option>
+      <option value="Price_desc">Price: High → Low</option>
+      <option value="Author_asc">Author A–Z</option>
+      <option value="Rating_desc">Best Rated</option>
+    </select>
+  </div>
+</div>
+
+<!-- Loading -->
+@if (isLoading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-gold" role="status"></div>
+  </div>
+}
+
+<!-- Grid -->
+@if (!isLoading()) {
+  <div class="row g-4 row-cols-2 row-cols-md-3 row-cols-lg-4">
+    @for (book of books(); track book.id) {
+      <div class="col">
+        <div class="book-card">
+          <div class="book-cover mb-3" style="position: relative">
+            <a
+              [routerLink]="['/book', book.id, toSlug(book.title)]"
+              class="d-block text-decoration-none"
+            >
+              <img [src]="book.image" [alt]="book.title" loading="lazy" />
+            </a>
+            <div class="cover-overlay">
+              <button
+                class="btn btn-gold btn-sm px-3 fw-bold"
+                (click)="addToCart(book, $event)"
+              >
+                <i class="bi bi-bag-plus me-1"></i>Add
+              </button>
+            </div>
+          </div>
+          <a
+            [routerLink]="['/book', book.id, toSlug(book.title)]"
+            class="text-decoration-none"
+          >
+            <p class="book-title mb-1">{{ book.title }}</p>
+          </a>
+          @if (book.author) {
+            <small class="text-brand-gray d-block mb-2">{{
+              book.author
+            }}</small>
+          }
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="book-price">${{ book.price.toFixed(2) }}</span>
+            <button
+              class="btn btn-link btn-sm p-0 text-gold fw-semibold text-decoration-none"
+              (click)="addToCart(book, $event)"
+            >
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if (totalPages() > 1) {
+    <div class="d-flex flex-column align-items-center mt-5 gap-2">
+      <nav>
+        <ul class="pagination pagination-brand mb-0">
+          <li class="page-item" [class.disabled]="currentPage() === 1">
+            <button
+              class="page-link"
+              (click)="goToPage(currentPage() - 1)"
+              [disabled]="currentPage() === 1"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+
+          @for (page of visiblePages(); track page) {
+            @if (page === -1) {
+              <li class="page-item disabled">
+                <span class="page-link">…</span>
+              </li>
+            } @else {
+              <li class="page-item" [class.active]="page === currentPage()">
+                <button class="page-link" (click)="goToPage(page)">
+                  {{ page }}
+                </button>
+              </li>
+            }
+          }
+
+          <li
+            class="page-item"
+            [class.disabled]="currentPage() === totalPages()"
+          >
+            <button
+              class="page-link"
+              (click)="goToPage(currentPage() + 1)"
+              [disabled]="currentPage() === totalPages()"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <small class="text-brand-gray"
+        >Page {{ currentPage() }} of {{ totalPages() }}</small
+      >
+    </div>
+  }
+}

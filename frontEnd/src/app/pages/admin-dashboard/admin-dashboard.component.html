@@ -1,0 +1,39 @@
+<app-admin-sidebar [activeTab]="activeTab" (tabChange)="showTab($event)"></app-admin-sidebar>
+
+<!-- MAIN -->
+<div class="admin-main-content">
+  <app-admin-topbar [topbarTitle]="topbarTitle" [topbarSub]="topbarSub"></app-admin-topbar>
+
+  <div class="page-body">
+    @if (activeTab === 'overview') {
+    <app-admin-overview-panel></app-admin-overview-panel>
+    }
+    @if (activeTab === 'books') {
+    <app-admin-books-panel></app-admin-books-panel>
+    }
+    @if (activeTab === 'genres') {
+    <app-admin-genres-panel></app-admin-genres-panel>
+    }
+    @if (activeTab === 'authors') {
+    <app-admin-authors-panel></app-admin-authors-panel>
+    }
+    @if (activeTab === 'orders') {
+    <app-admin-orders-panel></app-admin-orders-panel>
+    }
+    @if (activeTab === 'payments') {
+    <app-admin-payments-panel></app-admin-payments-panel>
+    }
+    @if (activeTab === 'shippings') {
+    <app-admin-shippings-panel></app-admin-shippings-panel>
+    }
+    @if (activeTab === 'customers') {
+    <app-admin-customers-panel></app-admin-customers-panel>
+    }
+    @if (activeTab === 'reviews') {
+    <app-admin-reviews-panel></app-admin-reviews-panel>
+    }
+    @if (activeTab === 'settings') {
+    <app-admin-settings-panel></app-admin-settings-panel>
+    }
+  </div>
+</div>

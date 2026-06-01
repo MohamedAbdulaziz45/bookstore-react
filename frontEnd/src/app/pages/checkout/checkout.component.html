@@ -1,0 +1,331 @@
+<app-header></app-header>
+
+<!-- Breadcrumb Banner -->
+<div class="page-banner">
+  <div class="container text-center">
+    <h1 class="section-title mb-2">Checkout</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item">
+          <a routerLink="/" class="text-gold">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a routerLink="/cart" class="text-gold">Cart</a>
+        </li>
+        <li class="breadcrumb-item active text-brand-gray">Checkout</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="section-py bg-brand">
+  <div class="container">
+    <!-- ══════════════════════ STATE 1: Loading ══════════════════════ -->
+    <div *ngIf="isLoadingAddresses" class="text-center py-5">
+      <div class="spinner-border text-gold" role="status"></div>
+      <p class="mt-3 text-muted">Loading your addresses...</p>
+    </div>
+
+    <!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+    <div *ngIf="!isLoadingAddresses" class="row g-5">
+      <!-- ── LEFT COLUMN ── -->
+      <div class="col-lg-7">
+        <!-- ═══ STATE 2: Has Addresses → Picker ═══ -->
+        <div *ngIf="addresses.length > 0">
+          <h4 class="checkout-heading">Select Shipping Address</h4>
+
+          <div class="address-list">
+            <div
+              *ngFor="let addr of addresses"
+              class="address-card"
+              [class.selected]="selectedAddressId === addr.addressId"
+              (click)="selectAddress(addr.addressId)"
+            >
+              <div class="address-radio">
+                <div class="radio-dot" [class.active]="selectedAddressId === addr.addressId"></div>
+              </div>
+              <div class="address-info">
+                <div class="address-label-row">
+                  <span class="address-label">
+                    <i
+                      class="bi"
+                      [ngClass]="addr.label === 'Home' ? 'bi-house' : addr.label === 'Office' ? 'bi-building' : 'bi-geo-alt'"
+                    ></i>
+                    {{ addr.label }}
+                  </span>
+                  <span *ngIf="addr.isDefault" class="default-badge">DEFAULT</span>
+                </div>
+                <div class="address-name">{{ addr.fullName }}</div>
+                <div class="address-detail">
+                  {{ addr.addressLine1 }}
+                  <span *ngIf="addr.addressLine2">, {{ addr.addressLine2 }}</span>
+                </div>
+                <div class="address-detail">
+                  {{ addr.city }}<span *ngIf="addr.state">, {{ addr.state }}</span>
+                  {{ addr.postalCode }}
+                </div>
+                <div class="address-phone">
+                  <i class="bi bi-telephone"></i> {{ addr.phone }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add New Button -->
+          <button class="btn-add-address" (click)="showAddressModal = true">
+            <i class="bi bi-plus-lg"></i> Add New Address
+          </button>
+        </div>
+
+        <!-- ═══ STATE 3: No Addresses → Inline Form ═══ -->
+        <div *ngIf="addresses.length === 0">
+          <h4 class="checkout-heading">Add Shipping Address</h4>
+          <p class="text-muted mb-4" style="font-size: 0.9rem">
+            You don't have any saved addresses. Add one to continue.
+          </p>
+
+          <form
+            [formGroup]="inlineAddressForm"
+            class="inline-address-form"
+          >
+            <!-- Label -->
+            <div class="form-group">
+              <label class="form-label-sm">Label</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="label"
+                placeholder="e.g. Home, Office"
+              />
+              <div
+                class="field-error"
+                *ngIf="inlineAddressForm.get('label')?.touched && inlineAddressForm.get('label')?.invalid"
+              >
+                Label is required
+              </div>
+            </div>
+
+            <!-- Full Name + Phone -->
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label-sm">Full Name</label>
+                  <input
+                    type="text"
+                    class="form-control-custom"
+                    formControlName="fullName"
+                    placeholder="John Doe"
+                  />
+                  <div
+                    class="field-error"
+                    *ngIf="inlineAddressForm.get('fullName')?.touched && inlineAddressForm.get('fullName')?.invalid"
+                  >
+                    Full name is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label-sm">Phone</label>
+                  <input
+                    type="tel"
+                    class="form-control-custom"
+                    formControlName="phone"
+                    placeholder="+20 1234567890"
+                  />
+                  <div
+                    class="field-error"
+                    *ngIf="inlineAddressForm.get('phone')?.touched && inlineAddressForm.get('phone')?.invalid"
+                  >
+                    Phone is required
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Address Line 1 -->
+            <div class="form-group">
+              <label class="form-label-sm">Address Line 1</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="addressLine1"
+                placeholder="Street address"
+              />
+              <div
+                class="field-error"
+                *ngIf="inlineAddressForm.get('addressLine1')?.touched && inlineAddressForm.get('addressLine1')?.invalid"
+              >
+                Address is required
+              </div>
+            </div>
+
+            <!-- Address Line 2 -->
+            <div class="form-group">
+              <label class="form-label-sm">Address Line 2 (Optional)</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="addressLine2"
+                placeholder="Apartment, suite, floor"
+              />
+            </div>
+
+            <!-- City + State -->
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label-sm">City</label>
+                  <input
+                    type="text"
+                    class="form-control-custom"
+                    formControlName="city"
+                    placeholder="Cairo"
+                  />
+                  <div
+                    class="field-error"
+                    *ngIf="inlineAddressForm.get('city')?.touched && inlineAddressForm.get('city')?.invalid"
+                  >
+                    City is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label-sm">State (Optional)</label>
+                  <input
+                    type="text"
+                    class="form-control-custom"
+                    formControlName="state"
+                    placeholder="e.g. Cairo Governorate"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Postal Code + Country -->
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label-sm">Postal Code</label>
+                  <input
+                    type="text"
+                    class="form-control-custom"
+                    formControlName="postalCode"
+                    placeholder="11511"
+                  />
+                  <div
+                    class="field-error"
+                    *ngIf="inlineAddressForm.get('postalCode')?.touched && inlineAddressForm.get('postalCode')?.invalid"
+                  >
+                    Postal code is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label-sm">Country Code</label>
+                  <input
+                    type="text"
+                    class="form-control-custom"
+                    formControlName="country"
+                    placeholder="EG"
+                    maxlength="2"
+                    style="text-transform: uppercase"
+                  />
+                  <div
+                    class="field-error"
+                    *ngIf="inlineAddressForm.get('country')?.touched && inlineAddressForm.get('country')?.invalid"
+                  >
+                    2-letter country code required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── RIGHT COLUMN: Order Summary ── -->
+      <div class="col-lg-5">
+        <div class="order-summary sticky-top" style="top: 100px">
+          <h5 class="summary-heading">Your Order</h5>
+
+          <!-- Cart Items -->
+          <div
+            class="summary-item"
+            *ngFor="let item of cartService.cartItems()"
+          >
+            <div>
+              <h6 class="mb-0 fw-semibold">{{ item.title }}</h6>
+              <small class="text-muted">x {{ item.quantity }}</small>
+            </div>
+            <span>{{ (item.price * item.quantity).toFixed(2) }} EGP</span>
+          </div>
+
+          <!-- Totals -->
+          <div class="summary-row text-muted mt-4">
+            <span>Subtotal</span>
+            <span>{{ cartService.totalPrice().toFixed(2) }} EGP</span>
+          </div>
+          <div class="summary-row text-muted border-bottom-custom pb-4 mb-4">
+            <span>Shipping</span>
+            <span class="text-success">Free</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total</span>
+            <span>{{ cartService.totalPrice().toFixed(2) }} EGP</span>
+          </div>
+
+          <!-- Pay Button -->
+          <button
+            *ngIf="addresses.length > 0"
+            class="btn-pay"
+            [disabled]="!selectedAddressId || isProcessing || cartService.cartItems().length === 0"
+            (click)="payWithStripe()"
+          >
+            <span
+              *ngIf="isProcessing"
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+            ></span>
+            <i *ngIf="!isProcessing" class="bi bi-lock me-2"></i>
+            {{ isProcessing ? "Redirecting to payment..." : "Pay with Stripe" }}
+          </button>
+
+          <!-- Save & Continue Button (inline form case) -->
+          <button
+            *ngIf="addresses.length === 0"
+            class="btn-pay"
+            [disabled]="inlineAddressForm.invalid || isProcessing || cartService.cartItems().length === 0"
+            (click)="saveInlineAndCheckout()"
+          >
+            <span
+              *ngIf="isProcessing"
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+            ></span>
+            <i *ngIf="!isProcessing" class="bi bi-lock me-2"></i>
+            {{ isProcessing ? "Redirecting to payment..." : "Save Address & Pay" }}
+          </button>
+
+          <!-- Secure badge -->
+          <div class="secure-badge">
+            <i class="bi bi-shield-check"></i>
+            Payments are securely processed by Stripe
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Address Modal (for adding new when user already has addresses) -->
+<app-address-form-modal
+  [isOpen]="showAddressModal"
+  [isFirstAddress]="false"
+  (saved)="onAddressSaved($event)"
+  (closed)="showAddressModal = false"
+/>
+
+<app-footer></app-footer>

@@ -1,0 +1,60 @@
+<div class="admin-sidebar">
+    <div class="sidebar-brand">
+        <div class="logo-text">📚 BookWorms</div>
+        <div class="role-badge">Admin Panel</div>
+    </div>
+
+    <div class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <a class="nav-item-link" [class.active]="activeTab === 'overview'" (click)="selectTab('overview')">
+            <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+
+        <div class="nav-section-label">Catalogue</div>
+        <a class="nav-item-link" [class.active]="activeTab === 'books'" (click)="selectTab('books')">
+            <i class="bi bi-book"></i> Books
+        </a>
+        <a class="nav-item-link" [class.active]="activeTab === 'genres'" (click)="selectTab('genres')">
+            <i class="bi bi-tags"></i> Genres
+        </a>
+        <a class="nav-item-link" [class.active]="activeTab === 'authors'" (click)="selectTab('authors')">
+            <i class="bi bi-pen"></i> Authors
+        </a>
+
+        <div class="nav-section-label">Sales</div>
+        <a class="nav-item-link" [class.active]="activeTab === 'orders'" (click)="selectTab('orders')">
+            <i class="bi bi-bag"></i> Orders <span class="badge-count">12</span>
+        </a>
+        <a class="nav-item-link" [class.active]="activeTab === 'payments'" (click)="selectTab('payments')">
+            <i class="bi bi-credit-card"></i> Payments
+        </a>
+        <a class="nav-item-link" [class.active]="activeTab === 'shippings'" (click)="selectTab('shippings')">
+            <i class="bi bi-truck"></i> Shippings
+        </a>
+
+        <div class="nav-section-label">Community</div>
+        <a class="nav-item-link" [class.active]="activeTab === 'customers'" (click)="selectTab('customers')">
+            <i class="bi bi-people"></i> Customers
+        </a>
+        <a class="nav-item-link" [class.active]="activeTab === 'reviews'" (click)="selectTab('reviews')">
+            <i class="bi bi-chat-square-text"></i> Reviews <span class="badge-count">5</span>
+        </a>
+
+        <div class="nav-section-label">System</div>
+        <a class="nav-item-link" [class.active]="activeTab === 'settings'" (click)="selectTab('settings')">
+            <i class="bi bi-gear"></i> Settings
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="d-flex align-items-center gap-2">
+            <div class="admin-avatar">AD</div>
+            <div>
+                <div class="admin-name">Admin User</div>
+                <div class="admin-email">admin&#64;bookworms.com</div>
+            </div>
+            <a href="#" class="ms-auto" style="color:rgba(255,255,255,.4); font-size:.9rem;"><i
+                    class="bi bi-box-arrow-right"></i></a>
+        </div>
+    </div>
+</div>

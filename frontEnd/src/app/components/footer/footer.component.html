@@ -1,0 +1,59 @@
+<footer class="main-footer pt-5">
+  <div class="container-fluid px-5">
+    <div
+      class="row g-4 pb-5"
+      style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+    >
+      <div class="col-lg-4 col-md-6">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div
+            class="d-flex align-items-center justify-content-center rounded-2 bg-gold"
+            style="width: 34px; height: 34px; flex-shrink: 0"
+          >
+            <span>📚</span>
+          </div>
+          <span
+            class="fw-bold fs-5 text-white"
+            style="font-family: &quot;Lato&quot;, sans-serif"
+            >BookWorms</span
+          >
+        </div>
+        <p
+          class="small mb-4"
+          style="color: rgba(255, 255, 255, 0.55); max-width: 260px"
+        >
+          Your gateway to endless stories and knowledge. Discover, read, and
+          grow with every page.
+        </p>
+        <div class="d-flex gap-2">
+          @for (s of socials; track s.label) {
+            <a href="#" class="social-link" [attr.aria-label]="s.label">
+              <i [class]="'bi ' + s.icon"></i>
+            </a>
+          }
+        </div>
+      </div>
+
+      @for (col of columns; track col.heading) {
+        <div class="col-6 col-md-2 col-lg-2">
+          <p class="footer-col-title">{{ col.heading }}</p>
+          <ul class="list-unstyled mb-0">
+            @for (link of col.links; track link.label) {
+              <li class="mb-2">
+                <a [routerLink]="link.path">{{ link.label }}</a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+
+    <div
+      class="d-flex flex-column flex-md-row align-items-center justify-content-between py-3 gap-2"
+    >
+      <p class="small mb-0" style="color: rgba(255, 255, 255, 0.4)">
+        © 2026 BookWorms. All rights reserved to Mohamed Abdulaziz.
+      </p>
+    </div>
+  </div>
+</footer>

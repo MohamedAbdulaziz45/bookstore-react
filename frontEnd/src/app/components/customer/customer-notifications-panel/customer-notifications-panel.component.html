@@ -1,0 +1,93 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div class="section-heading mb-0">Notifications</div>
+  <button
+    class="btn btn-link p-0"
+    style="font-size: 0.8rem; color: var(--gold); text-decoration: none"
+    (click)="markAllAsRead()"
+  >
+    Mark all as read
+  </button>
+</div>
+
+@if (isLoading) {
+  <div class="card-box text-center py-4">
+    <div class="spinner-border text-gold" role="status"></div>
+    <div class="text-muted mt-3">Loading notifications...</div>
+  </div>
+}
+
+@if (!isLoading && notifications.length === 0) {
+  <div class="card-box text-center py-4">
+    <div style="font-weight: 800">No notifications yet</div>
+    <div class="text-muted mt-1">
+      Order updates and alerts will show up here.
+    </div>
+  </div>
+}
+
+<div class="card-box" style="padding: 0">
+  @for (notif of notifications; track notif.notificationId; let last = $last) {
+    <div
+      class="d-flex gap-3"
+      style="padding: 16px 20px"
+      (click)="openNotification(notif)"
+      [style.cursor]="'pointer'"
+      [style.border-bottom]="!last ? '1px solid var(--brand-border)' : 'none'"
+      [style.background]="
+        !notif.isRead ? 'rgba(225,169,43,.03)' : 'transparent'
+      "
+    >
+      <div
+        style="
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.04);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        "
+        [style.color]="'var(--gold)'"
+      >
+        <i class="bi" [ngClass]="getIcon(notif.type)"></i>
+      </div>
+      <div style="flex: 1">
+        <div class="d-flex justify-content-between align-items-start mb-1">
+          <div
+            style="font-weight: 600; font-size: 0.9rem"
+            [style.color]="
+              !notif.isRead ? 'var(--brand-dark)' : 'var(--brand-gray)'
+            "
+          >
+            {{ notif.title }}
+          </div>
+          <div style="font-size: 0.75rem; color: var(--brand-gray)">
+            {{ notif.createdAt | date: "short" }}
+          </div>
+        </div>
+        <p
+          style="
+            font-size: 0.85rem;
+            color: var(--brand-gray);
+            margin: 0;
+            line-height: 1.5;
+          "
+        >
+          {{ notif.message }}
+        </p>
+      </div>
+      @if (!notif.isRead) {
+        <div
+          style="
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+            margin-top: 6px;
+          "
+        ></div>
+      }
+    </div>
+  }
+</div>

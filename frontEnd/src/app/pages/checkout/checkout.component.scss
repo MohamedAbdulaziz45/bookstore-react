@@ -1,0 +1,241 @@
+/* ── Checkout Heading ── */
+.checkout-heading {
+  font-family: "Lora", serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Address Picker Cards ── */
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.address-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 2px solid var(--brand-border, #eee);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fff;
+
+  &:hover {
+    border-color: var(--gold, #c78b51);
+    box-shadow: 0 2px 12px rgba(199, 139, 81, 0.1);
+  }
+
+  &.selected {
+    border-color: var(--gold, #c78b51);
+    background: rgba(199, 139, 81, 0.03);
+  }
+}
+
+.address-radio {
+  padding-top: 2px;
+}
+
+.radio-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--brand-border, #ccc);
+  transition: all 0.2s ease;
+  position: relative;
+
+  &.active {
+    border-color: var(--gold, #c78b51);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--gold, #c78b51);
+    }
+  }
+}
+
+.address-info {
+  flex: 1;
+}
+
+.address-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.address-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  i {
+    color: var(--brand-gray, #888);
+  }
+}
+
+.default-badge {
+  font-size: 0.65rem;
+  background: rgba(225, 169, 43, 0.15);
+  color: var(--gold, #c78b51);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.address-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.address-detail {
+  font-size: 0.8rem;
+  color: var(--brand-gray, #888);
+  line-height: 1.5;
+}
+
+.address-phone {
+  font-size: 0.8rem;
+  color: var(--brand-gray, #888);
+  margin-top: 6px;
+
+  i {
+    margin-right: 4px;
+  }
+}
+
+/* ── Add New Address Button ── */
+.btn-add-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: none;
+  border: 2px dashed var(--brand-border, #ccc);
+  border-radius: 10px;
+  color: var(--gold, #c78b51);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+
+  &:hover {
+    border-color: var(--gold, #c78b51);
+    background: rgba(199, 139, 81, 0.03);
+  }
+}
+
+/* ── Inline Address Form ── */
+.inline-address-form {
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--brand-border, #eee);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: #dc3545;
+  margin-top: 4px;
+}
+
+/* ── Order Summary ── */
+.order-summary {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.summary-heading {
+  font-family: "Lora", serif;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--brand-border, #eee);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.border-bottom-custom {
+  border-bottom: 1px solid var(--brand-border, #eee);
+}
+
+.total-row {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold, #c78b51);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Pay Button ── */
+.btn-pay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px;
+  background: var(--gold, #c78b51);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #b37a44;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* ── Secure Badge ── */
+.secure-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--brand-gray, #888);
+
+  i {
+    color: #28a745;
+  }
+}

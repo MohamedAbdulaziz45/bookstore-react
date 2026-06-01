@@ -1,0 +1,350 @@
+<app-cart-sidebar></app-cart-sidebar>
+<app-header></app-header>
+
+<!-- Banner -->
+<div class="page-banner">
+  <div class="container text-center">
+    <h1 class="section-title mb-2">Shopping Cart</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item">
+          <a routerLink="/" class="text-gold">Home</a>
+        </li>
+        <li class="breadcrumb-item active text-brand-gray">Cart</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="section-py bg-brand">
+  <div class="container">
+    @if (cartService.cartItems().length === 0) {
+      <!-- ── Empty cart ──────────────────────────────────────────────────── -->
+      <div class="text-center py-5">
+        <div class="mb-4" style="font-size: 5rem; opacity: 0.35">🛒</div>
+        <h2 class="fw-bold mb-3">Your cart is empty</h2>
+        <p class="text-brand-gray mb-5 mx-auto" style="max-width: 380px">
+          Looks like you haven't added any books yet. Start browsing to find
+          something you'll love!
+        </p>
+        <a
+          routerLink="/all-books"
+          class="btn btn-gold btn-lg px-5 fw-bold text-uppercase"
+        >
+          <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+        </a>
+      </div>
+    } @else {
+      <!-- ── Cart layout ─────────────────────────────────────────────────── -->
+      <div class="row g-5 align-items-start">
+        <!-- Left – items -->
+        <div class="col-lg-8">
+          <!-- Count + clear -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5
+              class="fw-bold mb-0"
+              style="font-family: &quot;Lato&quot;, sans-serif"
+            >
+              {{ cartService.totalItems() }} item{{
+                cartService.totalItems() !== 1 ? "s" : ""
+              }}
+              in your cart
+            </h5>
+            <button
+              class="btn btn-link text-danger p-0 small fw-semibold text-decoration-none"
+              (click)="cartService.clearCart()"
+            >
+              <i class="bi bi-trash me-1"></i>Clear all
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive rounded-3 border border-brand shadow-sm">
+            <table class="table cart-table mb-0">
+              <thead>
+                <tr>
+                  <th class="ps-4" colspan="2">Product</th>
+                  <th class="text-center">Price</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-center">Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of cartService.cartItems(); track item.bookId) {
+                  <tr>
+                    <!-- Thumb -->
+                    <td class="ps-4" style="width: 80px">
+                      <a
+                        [routerLink]="[
+                          '/book',
+                          item.bookId,
+                          toSlug(item.title),
+                        ]"
+                      >
+                        <img
+                          [src]="item.imageUrl"
+                          [alt]="item.title"
+                          class="cart-book-img"
+                        />
+                      </a>
+                    </td>
+                    <!-- Title -->
+                    <td>
+                      <a
+                        [routerLink]="[
+                          '/book',
+                          item.bookId,
+                          toSlug(item.title),
+                        ]"
+                        class="text-decoration-none"
+                      >
+                        <p
+                          class="fw-semibold mb-1 small lh-sm"
+                          style="color: var(--brand-dark)"
+                        >
+                          {{ item.title }}
+                        </p>
+                      </a>
+                      <!-- @if (item.author) {
+                        <small class="text-brand-gray">{{
+                          item.book.author
+                        }}</small>
+                      } -->
+                    </td>
+                    <!-- Price -->
+                    <td class="text-center">
+                      <span class="fw-semibold text-gold"
+                        >${{ item.price.toFixed(2) }}</span
+                      >
+                    </td>
+                    <!-- Qty -->
+                    <td class="text-center">
+                      <div
+                        class="d-flex align-items-center justify-content-center gap-1"
+                      >
+                        <button
+                          class="btn btn-sm btn-outline-secondary rounded-circle"
+                          style="
+                            width: 28px;
+                            height: 28px;
+                            padding: 0;
+                            font-size: 0.85rem;
+                          "
+                          (click)="updateQty(item.bookId, item.quantity - 1)"
+                        >
+                          −
+                        </button>
+                        <input
+                          type="text"
+                          inputmode="numeric"
+                          pattern="[0-9]*"
+                          [value]="item.quantity"
+                          min="1"
+                          class="qty-input"
+                          (change)="
+                            updateQty(
+                              item.bookId,
+                              clamp(
+                                +$any($event.target).value,
+                                item.quantityInStock
+                              )
+                            )
+                          "
+                        />
+                        <button
+                          class="btn btn-sm btn-outline-secondary rounded-circle"
+                          style="
+                            width: 28px;
+                            height: 28px;
+                            padding: 0;
+                            font-size: 0.85rem;
+                          "
+                          (click)="updateQty(item.bookId, item.quantity + 1)"
+                          [disabled]="item.quantity >= item.quantityInStock"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <!-- Subtotal -->
+                    <td class="text-center fw-bold">
+                      ${{ item.lineTotal.toFixed(2) }}
+                    </td>
+                    <!-- Remove -->
+                    <td class="pe-3">
+                      <button
+                        class="remove-btn"
+                        (click)="cartService.removeItem(item.bookId)"
+                        title="Remove item"
+                      >
+                        <i class="bi bi-x-circle-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Coupon -->
+          <!-- <div class="mt-4 p-4 rounded-3 bg-warm border border-brand">
+            <h6
+              class="fw-bold mb-3"
+              style="font-family: &quot;Lato&quot;, sans-serif"
+            >
+              <i class="bi bi-tag-fill text-gold me-2"></i>Have a coupon?
+            </h6>
+            @if (couponApplied()) {
+              <div class="d-flex align-items-center gap-3">
+                <div
+                  class="alert alert-success d-flex align-items-center py-2 px-3 mb-0 flex-grow-1 small fw-semibold"
+                >
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Coupon <strong class="mx-1">{{ COUPON }}</strong> applied —
+                  {{ DISCOUNT_PC }}% off!
+                </div>
+                <button
+                  class="btn btn-sm btn-outline-danger fw-bold"
+                  (click)="removeCoupon()"
+                >
+                  Remove
+                </button>
+              </div>
+            } @else {
+              <div class="d-flex gap-2" style="max-width: 420px">
+                <input
+                  type="text"
+                  [(ngModel)]="couponCode"
+                  placeholder="Coupon code"
+                  class="form-control"
+                  [class.is-invalid]="couponError()"
+                  (keyup.enter)="applyCoupon()"
+                />
+                <button
+                  class="btn btn-gold fw-bold text-uppercase px-4"
+                  (click)="applyCoupon()"
+                >
+                  Apply
+                </button>
+              </div>
+              @if (couponError()) {
+                <div class="invalid-feedback d-block mt-1 small">
+                  Invalid code. Try <strong>{{ COUPON }}</strong> for
+                  {{ DISCOUNT_PC }}% off!
+                </div>
+              } @else {
+                <small class="text-brand-gray d-block mt-2">
+                  Use code
+                  <span class="fw-bold text-gold">{{ COUPON }}</span> for
+                  {{ DISCOUNT_PC }}% off your order
+                </small>
+              }
+            }
+          </div> -->
+
+          <div class="mt-3">
+            <a
+              routerLink="/all-books"
+              class="btn btn-gold-outline fw-bold text-uppercase px-4"
+            >
+              <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+            </a>
+          </div>
+        </div>
+
+        <!-- Right – summary -->
+        <div class="col-lg-4">
+          <div class="order-summary sticky-top" style="top: 100px">
+            <h5
+              class="fw-bold mb-4"
+              style="font-family: &quot;Lato&quot;, sans-serif"
+            >
+              Order Summary
+            </h5>
+
+            <div class="summary-row">
+              <span class="text-brand-gray"
+                >Subtotal ({{ cartService.totalItems() }} items)</span
+              >
+              <span class="fw-semibold"
+                >${{ cartService.totalPrice().toFixed(2) }}</span
+              >
+            </div>
+            <!-- 
+            @if (couponApplied()) {
+              <div class="summary-row" style="color: #198754">
+                <span
+                  ><i class="bi bi-tag-fill me-1"></i>Discount ({{
+                    DISCOUNT_PC
+                  }}%)</span
+                >
+                <span class="fw-semibold">−${{ discount().toFixed(2) }}</span>
+              </div>
+            } -->
+
+            <div class="summary-row">
+              <span class="text-brand-gray">Shipping</span>
+              <span class="fw-semibold" style="color: #198754">
+                <i class="bi bi-truck me-1"></i>Free
+              </span>
+            </div>
+
+            <div class="summary-total">
+              <span>Total</span>
+              <span class="text-gold fs-4">${{ orderTotal().toFixed(2) }}</span>
+            </div>
+
+            <a
+              routerLink="/checkout"
+              class="btn btn-gold w-100 btn-lg fw-bold text-uppercase mt-4 py-3"
+            >
+              <i class="bi bi-lock-fill me-2"></i>Proceed to Checkout
+            </a>
+
+            <!-- Trust badges -->
+            <div class="mt-4 pt-3 border-top border-brand">
+              <div class="row row-cols-3 g-2 text-center">
+                @for (b of trustBadges; track b.icon) {
+                  <div class="col">
+                    <i
+                      [class]="'bi ' + b.icon + ' trust-icon d-block mb-1'"
+                    ></i>
+                    <small
+                      class="text-brand-gray lh-sm"
+                      style="font-size: 0.65rem"
+                      >{{ b.label }}</small
+                    >
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="text-center mt-4">
+              <small class="text-brand-gray d-block mb-2">We accept</small>
+              <img
+                src="https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/payment-image.png"
+                alt="Payment methods"
+                class="img-fluid"
+                style="opacity: 0.6; max-height: 22px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- You may also like -->
+<app-book-grid
+  [books]="suggestedBooks"
+  title="You May Also Like"
+  description="Readers who filled their carts also loved these."
+  [showViewMore]="true"
+>
+</app-book-grid>
+
+<app-newsletter-section></app-newsletter-section>
+<app-footer></app-footer>

@@ -1,0 +1,160 @@
+<app-cart-sidebar></app-cart-sidebar>
+<app-header></app-header>
+<app-page-banner title="About Us"
+  subtitle="Learn about who we are, what we believe, and why books matter to us.">
+</app-page-banner>
+
+<!-- Welcome -->
+<section class="section-py bg-brand">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="section-label">Our Story</span>
+        <h2 class="section-title mb-4">Welcome to BookWorms</h2>
+        <p class="text-brand-gray lh-lg mb-3">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem eget condimentum enim
+          libero ultricies amet odio fringilla. Ut nibh morbi augue porta aliquet commodo.
+          Fermentum auctor lacus eget in ut integer viverra sed.
+        </p>
+        <p class="text-brand-gray lh-lg mb-4">
+          Penatibus tortor consequat, habitasse non nisl. Mus cras lacus tellus morbi viverra
+          suspendisse ornare. Sit volutpat, volutpat ut netus malesuada enim penatibus non aliquet.
+        </p>
+        <a routerLink="/all-books" class="btn btn-gold btn-lg px-5 fw-bold text-uppercase">
+          Browse Books
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <div class="split-img">
+          <img src="https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/about-image.jpg"
+               alt="About BookWorms" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Vision & Mission -->
+<section class="section-py bg-warm">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-6">
+        <span class="section-label">What We Believe</span>
+        <h2 class="section-title mb-4">Our Vision</h2>
+        <p class="text-brand-gray lh-lg mb-3">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem eget condimentum enim
+          libero ultricies amet odio fringilla. Ut nibh morbi augue porta aliquet commodo.
+        </p>
+        <p class="text-brand-gray lh-lg mb-4">
+          Mus cras lacus tellus morbi viverra suspendisse ornare. Sit volutpat, volutpat ut netus
+          malesuada enim penatibus non aliquet.
+        </p>
+        <blockquote class="ps-4 fst-italic fw-semibold"
+                    style="border-left:4px solid var(--gold);color:var(--brand-dark)">
+          Integ nosd quos cras demque sint fames sque optio aut Impedit metus quas neque
+          accu minus be since 1918
+        </blockquote>
+      </div>
+      <div class="col-lg-6">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title mb-4">Our Mission</h2>
+        <p class="text-brand-gray lh-lg mb-3">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem eget condimentum enim
+          libero ultricies amet odio fringilla. Ut nibh morbi augue porta aliquet commodo.
+        </p>
+        <p class="text-brand-gray lh-lg mb-3">
+          Mus cras lacus tellus morbi viverra suspendisse ornare. Sit volutpat, volutpat ut netus
+          malesuada enim penatibus non aliquet.
+        </p>
+        <p class="text-brand-gray lh-lg">
+          Mus cras lacus tellus morbi viverra suspendisse ornare. Sit volutpat, volutpat ut netus
+          malesuada enim penatibus non aliquet.
+        </p>
+      </div>
+    </div>
+
+    <!-- As seen in -->
+    <div class="mt-5 pt-4 border-top border-brand">
+      <p class="text-center text-brand-gray small fw-bold text-uppercase mb-4"
+         style="letter-spacing:.14em">As seen in:</p>
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-md-5">
+        @for (logo of partnerLogos; track logo) {
+          <img [src]="logo" alt="Media partner"
+               style="height:26px;opacity:.5;filter:grayscale(1);transition:all .3s"
+               (mouseenter)="$any($event.target).style.opacity='1';$any($event.target).style.filter='none'"
+               (mouseleave)="$any($event.target).style.opacity='.5';$any($event.target).style.filter='grayscale(1)'" />
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section-py bg-brand">
+  <div class="container">
+    <div class="row row-cols-2 row-cols-md-4 g-4 text-center">
+      @for (s of stats; track s.label) {
+        <div class="col">
+          <div class="stat-item">
+            <div class="stat-num">{{ s.num }}</div>
+            <div class="stat-label">{{ s.label }}</div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Authors -->
+<section class="section-py bg-warm">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Most Popular Authors</h2>
+      <p class="text-brand-gray mt-2 mx-auto" style="max-width:500px">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      </p>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 g-4">
+      @for (author of authors; track author.id) {
+        <div class="col">
+          <div class="text-center">
+            <div class="author-avatar mb-3">
+              <img [src]="author.image" [alt]="author.name" loading="lazy" />
+            </div>
+            <h6 class="fw-bold mb-0">{{ author.name }}</h6>
+            <small class="text-brand-gray">{{ author.role }}</small>
+            <div class="d-flex justify-content-center gap-2 mt-2">
+              @for (s of ['Facebook','LinkedIn','Instagram']; track s) {
+                <a href="#" class="small text-brand-gray fw-semibold"
+                   style="transition:color .2s"
+                   (mouseenter)="$any($event.target).style.color='var(--gold)'"
+                   (mouseleave)="$any($event.target).style.color=''">{{ s }}</a>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Instagram feed -->
+<section class="section-py bg-brand text-center">
+  <div class="container">
+    <span class="section-label">Follow Us</span>
+    <h2 class="section-title mb-2">Follow &#64;bookworms</h2>
+    <p class="text-brand-gray mb-4 mx-auto" style="max-width:460px">
+      Leo nulla cras augue eros, diam vivamus et lectus volutpat at facilisi tortor porta.
+    </p>
+    <div class="rounded-3 overflow-hidden mb-4 shadow">
+      <img src="https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/instagram-feed.jpg"
+           alt="Instagram" class="w-100" style="max-height:320px;object-fit:cover" />
+    </div>
+    <a href="#" class="btn btn-gold btn-lg px-5 fw-bold text-uppercase">
+      <i class="bi bi-instagram me-2"></i>Visit Instagram
+    </a>
+  </div>
+</section>
+
+<app-newsletter-section></app-newsletter-section>
+<app-footer></app-footer>

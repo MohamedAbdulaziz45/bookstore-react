@@ -1,0 +1,30 @@
+<section class="hero-section">
+  <div class="container w-100">
+    <div class="row align-items-center g-5">
+
+      <!-- Left text -->
+      <div class="col-lg-6">
+        <div class="hero-badge">Latest Books</div>
+        <h1 class="display-title mb-4">
+          You're Only One Book Away From a Good Mood
+        </h1>
+        <p class="text-brand-gray fs-5 lh-lg mb-5" style="max-width:480px">
+          Discover your next favourite read from our carefully curated collection
+          of books spanning all genres. Find stories that inspire, educate, and entertain.
+        </p>
+        <a routerLink="/all-books"
+           class="btn btn-gold btn-lg px-5 py-3 text-uppercase fw-bold">
+          Discover Now
+        </a>
+      </div>
+
+      <!-- Right image -->
+      <div class="col-lg-6">
+        <div class="hero-image-wrap" style="aspect-ratio:4/3">
+          <img [src]="heroImageUrl" alt="Book collection" loading="eager" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

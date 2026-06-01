@@ -1,0 +1,207 @@
+<app-cart-sidebar></app-cart-sidebar>
+<app-header></app-header>
+
+@if (book()) {
+  <!-- Breadcrumb -->
+  <div class="bg-warm border-bottom border-brand py-3">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item">
+            <a routerLink="/" class="text-gold">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a routerLink="/all-books" class="text-gold">All Books</a>
+          </li>
+          <li class="breadcrumb-item active text-brand-gray">
+            {{ book()!.title }}
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Product -->
+  <section class="section-py bg-brand">
+    <div class="container">
+      <div class="row g-5">
+        <!-- Image -->
+        <div class="col-lg-5">
+          <div
+            class="rounded-3 overflow-hidden shadow"
+            style="aspect-ratio: 3/4; max-width: 380px; margin: 0 auto"
+          >
+            <img
+              [src]="book()!.image"
+              [alt]="book()!.title"
+              class="w-100 h-100"
+              style="object-fit: cover"
+            />
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="col-lg-7 d-flex flex-column justify-content-center">
+          @if (book()!.categories.length) {
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              @for (category of book()!.categories; track category.id) {
+                <span
+                  class="badge rounded-pill fw-semibold text-uppercase small"
+                  style="
+                    background: rgba(212, 175, 55, 0.15);
+                    color: var(--brand-dark);
+                    letter-spacing: 0.06em;
+                    cursor: pointer;
+                  "
+                  [routerLink]="['/genres', category.id, toSlug(category.name)]"
+                >
+                  {{ category.name }}
+                </span>
+              }
+            </div>
+          }
+
+          <h1
+            class="section-title mb-2"
+            style="font-size: clamp(1.8rem, 4vw, 3rem)"
+          >
+            {{ book()!.title }}
+          </h1>
+          @if (book()!.author) {
+            <p class="text-brand-gray fw-semibold mb-3">
+              By
+              <a
+                [routerLink]="['/author', book()!.authorId, toSlug(book()!.author)]"
+                class="author-link"
+              >
+                {{ book()!.author }}
+              </a>
+            </p>
+          }
+          <!-- Stars -->
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="d-flex" style="color: #f5c518">
+              @for (s of [1, 2, 3, 4, 5]; track s) {
+                <i
+                  class="bi small"
+                  [class.bi-star-fill]="s <= (book()!.rating ?? 0)"
+                  [class.bi-star]="s > (book()!.rating ?? 0)"
+                >
+                </i>
+              }
+            </div>
+            <small class="text-brand-gray"
+              >({{ book()!.reviewCount }} reviews)</small
+            >
+          </div>
+
+          <div class="fw-bold text-gold mb-3" style="font-size: 2rem">
+            ${{ book()!.price.toFixed(2) }}
+          </div>
+          <p class="text-brand-gray lh-lg mb-4">{{ book()!.description }}</p>
+
+          <!-- Qty + Add to cart -->
+          <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+            <div class="input-group" style="width: 120px">
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="dec()"
+              >
+                −
+              </button>
+              <input
+                type="text"
+                class="form-control text-center fw-bold"
+                [value]="quantity()"
+                readonly
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="inc()"
+              >
+                +
+              </button>
+            </div>
+            <button
+              class="btn btn-lg fw-bold text-uppercase px-5 flex-grow-1"
+              (click)="addToCart()"
+              [class.btn-gold]="!justAdded()"
+              [class.btn-success]="justAdded()"
+            >
+              <i
+                [class]="
+                  justAdded() ? 'bi bi-check-lg me-2' : 'bi bi-bag-plus me-2'
+                "
+              ></i>
+              {{ justAdded() ? "Added to Cart!" : "Add to Cart" }}
+            </button>
+          </div>
+
+          <!-- Wishlist -->
+          <button
+            class="btn btn-gold-outline btn-sm px-4 text-uppercase fw-bold align-self-start"
+          >
+            <i class="bi bi-heart me-2"></i>Add to Wishlist
+          </button>
+
+          <hr class="my-4" style="border-color: var(--brand-border)" />
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="mt-5">
+        <ul class="nav nav-tabs" style="border-color: var(--brand-border)">
+          <li class="nav-item">
+            <button
+              class="nav-link fw-semibold"
+              [class.active]="activeTab() === 'desc'"
+              (click)="activeTab.set('desc')"
+            >
+              Description
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="nav-link fw-semibold"
+              [class.active]="activeTab() === 'reviews'"
+              (click)="activeTab.set('reviews')"
+            >
+              Reviews ({{ book()!.reviewCount }})
+            </button>
+          </li>
+        </ul>
+        <div class="py-4 text-brand-gray lh-lg">
+          @if (activeTab() === "desc") {
+            <p>{{ book()!.description }}</p>
+          } @else {
+            <app-book-reviews
+              [bookId]="book()!.id"
+              (reviewAdded)="loadBook(book()!.id)"
+            />
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-book-grid
+    [books]="related()"
+    title="Related Products"
+    [showViewMore]="false"
+  ></app-book-grid>
+} @else {
+  <div class="container section-py text-center">
+    <h2 class="fw-bold mb-4">Book Not Found</h2>
+    <a
+      routerLink="/all-books"
+      class="btn btn-gold btn-lg px-5 fw-bold text-uppercase"
+    >
+      Back to All Books
+    </a>
+  </div>
+}
+
+<app-newsletter-section></app-newsletter-section>
+<app-footer></app-footer>

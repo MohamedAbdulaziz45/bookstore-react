@@ -1,0 +1,75 @@
+<section class="section-py bg-brand">
+  <div class="container-fluid px-2">
+    @if (title) {
+      <div class="text-center mb-5">
+        <h2 class="section-title">{{ title }}</h2>
+        @if (description) {
+          <p class="text-brand-gray mt-2 mx-auto" style="max-width: 520px">
+            {{ description }}
+          </p>
+        }
+      </div>
+    }
+    @if (isFallBack) {
+      <div class="alert alert-warning text-center" role="alert">
+        No books found. Displaying newest content.
+      </div>
+    }
+    <div class="row g-4" [class]="rowColsClass">
+      @for (book of books; track book.id) {
+        <div class="col">
+          <div class="book-card">
+            <!-- Cover -->
+            <a
+              [routerLink]="['/book', book.id, toSlug(book.title)]"
+              class="d-block text-decoration-none book-cover mb-3"
+            >
+              <img [src]="book.image" [alt]="book.title" loading="lazy" />
+              <div class="cover-overlay">
+                <button
+                  class="btn btn-gold btn-sm px-3 fw-bold"
+                  (click)="addToCart(book, $event)"
+                >
+                  <i class="bi bi-bag-plus me-1"></i>Add
+                </button>
+              </div>
+            </a>
+
+            <!-- Info -->
+            <a
+              [routerLink]="['/book', book.id, toSlug(book.title)]"
+              class="text-decoration-none"
+            >
+              <p class="book-title mb-1">{{ book.title }}</p>
+            </a>
+            @if (book.author) {
+              <small class="text-brand-gray d-block mb-2">{{
+                book.author
+              }}</small>
+            }
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="book-price">${{ book.price.toFixed(2) }}</span>
+              <button
+                class="btn btn-link btn-sm p-0 fw-semibold text-gold text-decoration-none"
+                (click)="addToCart(book, $event)"
+              >
+                Add to cart
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (showViewMore) {
+      <div class="text-center mt-5">
+        <a
+          routerLink="/all-books"
+          class="btn btn-gold btn-lg px-5 text-uppercase fw-bold"
+        >
+          Discover More Books
+        </a>
+      </div>
+    }
+  </div>
+</section>

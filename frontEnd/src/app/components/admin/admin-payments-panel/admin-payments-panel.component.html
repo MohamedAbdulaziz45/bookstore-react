@@ -1,0 +1,99 @@
+<div class="admin-panel active d-block">
+  <div class="section-header mb-4">
+    <div class="dash-section-title">Payments</div>
+    <div class="search-wrap">
+      <i class="bi bi-search"></i>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search payments..."
+        [(ngModel)]="search"
+        (ngModelChange)="applySearch()"
+      />
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--gold)">{{ formatCurrency(totalCollected()) }}</div>
+        <div class="stat-label">Total Collected</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-value" style="color:#198754">{{ payments.length }}</div>
+        <div class="stat-label">Payments</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-value" style="color:#dc3545">0</div>
+        <div class="stat-label">Refund records</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    @if (loading) {
+    <div class="admin-state">Loading payments...</div>
+    } @else if (error) {
+    <div class="admin-state error">{{ error }}</div>
+    } @else if (!filteredPayments.length) {
+    <div class="admin-state">No payments found.</div>
+    } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Payment ID</th>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Method</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (pay of filteredPayments; track pay.paymentId) {
+        <tr>
+          <td><span style="font-weight:600">#PAY-{{ pay.paymentId }}</span></td>
+          <td><span style="font-weight:600;color:var(--gold)">#ORD-{{ pay.orderId }}</span></td>
+          <td>{{ pay.customer || "Unknown" }}</td>
+          <td><i class="bi bi-credit-card-2-front me-2" style="color:var(--brand-gray)"></i>{{ pay.paymentMethod }}</td>
+          <td>{{ formatCurrency(pay.amount, pay.currency) }}</td>
+          <td style="color:var(--brand-gray)">{{ formatDate(pay.transactionDate) }}</td>
+          <td>
+            <button class="action-btn edit" type="button" title="View payment" (click)="viewPayment(pay)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <a class="action-btn edit" title="View order" [href]="'/orders/' + pay.orderId">
+              <i class="bi bi-receipt"></i>
+            </a>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+  </div>
+
+  @if (selectedPayment) {
+  <div class="admin-modal-backdrop" (click)="closeView()"></div>
+  <div class="admin-modal">
+    <div class="drawer-header">
+      <div class="dash-section-title">Payment #{{ selectedPayment.paymentId }}</div>
+      <button class="action-btn" type="button" title="Close" (click)="closeView()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-row"><span>Order</span><strong>#ORD-{{ selectedPayment.orderId }}</strong></div>
+      <div class="detail-row"><span>Customer</span><strong>{{ selectedPayment.customer }}</strong></div>
+      <div class="detail-row"><span>Amount</span><strong>{{ formatCurrency(selectedPayment.amount, selectedPayment.currency) }}</strong></div>
+      <div class="detail-row"><span>Method</span><strong>{{ selectedPayment.paymentMethod }}</strong></div>
+      <div class="detail-row"><span>Stripe intent</span><strong>{{ selectedPayment.stripePaymentIntentId || "None" }}</strong></div>
+    </div>
+  </div>
+  }
+</div>

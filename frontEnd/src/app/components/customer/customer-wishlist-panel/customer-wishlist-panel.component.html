@@ -1,0 +1,20 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="section-heading mb-0">My Wishlist <span
+            style="font-size:.9rem;color:var(--brand-gray);font-family:Lato">(8 books)</span></div>
+</div>
+<div class="wishlist-grid">
+    @for (item of wishlistItems; track item.title) {
+    <div class="wishlist-card">
+        <div class="wishlist-cover" [style.background]="item.coverBg">
+            <i class="bi bi-book"></i>
+            <button class="wishlist-remove"><i class="bi bi-x"></i></button>
+        </div>
+        <div class="wishlist-body">
+            <div class="wishlist-title">{{ item.title }}</div>
+            <div class="wishlist-author">{{ item.author }}</div>
+            <div class="wishlist-price">{{ item.price }}</div>
+            <button class="add-to-cart-btn"><i class="bi bi-bag-plus"></i> Add to Cart</button>
+        </div>
+    </div>
+    }
+</div>

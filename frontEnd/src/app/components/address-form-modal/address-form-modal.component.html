@@ -1,0 +1,227 @@
+<div
+  class="modal-backdrop"
+  *ngIf="isOpen"
+  (click)="onBackdropClick($event)"
+>
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <i class="bi" [ngClass]="isEditMode ? 'bi-pencil' : 'bi-plus-lg'"></i>
+        {{ isEditMode ? "Edit Address" : "Add New Address" }}
+      </h5>
+      <button type="button" class="btn-close-modal" (click)="close()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <!-- Label -->
+        <div class="form-group">
+          <label class="form-label-sm">Label</label>
+          <input
+            type="text"
+            class="form-control-custom"
+            formControlName="label"
+            placeholder="e.g. Home, Office"
+          />
+          <div
+            class="field-error"
+            *ngIf="
+              addressForm.get('label')?.touched &&
+              addressForm.get('label')?.invalid
+            "
+          >
+            Label is required (max 50 characters)
+          </div>
+        </div>
+
+        <!-- Full Name + Phone -->
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label-sm">Full Name</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="fullName"
+                placeholder="John Doe"
+              />
+              <div
+                class="field-error"
+                *ngIf="
+                  addressForm.get('fullName')?.touched &&
+                  addressForm.get('fullName')?.invalid
+                "
+              >
+                Full name is required
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label-sm">Phone</label>
+              <input
+                type="tel"
+                class="form-control-custom"
+                formControlName="phone"
+                placeholder="+20 1234567890"
+              />
+              <div
+                class="field-error"
+                *ngIf="
+                  addressForm.get('phone')?.touched &&
+                  addressForm.get('phone')?.invalid
+                "
+              >
+                Phone is required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address Line 1 -->
+        <div class="form-group">
+          <label class="form-label-sm">Address Line 1</label>
+          <input
+            type="text"
+            class="form-control-custom"
+            formControlName="addressLine1"
+            placeholder="Street address"
+          />
+          <div
+            class="field-error"
+            *ngIf="
+              addressForm.get('addressLine1')?.touched &&
+              addressForm.get('addressLine1')?.invalid
+            "
+          >
+            Address is required
+          </div>
+        </div>
+
+        <!-- Address Line 2 -->
+        <div class="form-group">
+          <label class="form-label-sm">Address Line 2 (Optional)</label>
+          <input
+            type="text"
+            class="form-control-custom"
+            formControlName="addressLine2"
+            placeholder="Apartment, suite, floor"
+          />
+        </div>
+
+        <!-- City + State -->
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label-sm">City</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="city"
+                placeholder="Cairo"
+              />
+              <div
+                class="field-error"
+                *ngIf="
+                  addressForm.get('city')?.touched &&
+                  addressForm.get('city')?.invalid
+                "
+              >
+                City is required
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label-sm">State (Optional)</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="state"
+                placeholder="e.g. Cairo Governorate"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Postal Code + Country -->
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label-sm">Postal Code</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="postalCode"
+                placeholder="11511"
+              />
+              <div
+                class="field-error"
+                *ngIf="
+                  addressForm.get('postalCode')?.touched &&
+                  addressForm.get('postalCode')?.invalid
+                "
+              >
+                Postal code is required
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label-sm">Country Code</label>
+              <input
+                type="text"
+                class="form-control-custom"
+                formControlName="country"
+                placeholder="EG"
+                maxlength="2"
+                style="text-transform: uppercase"
+              />
+              <div
+                class="field-error"
+                *ngIf="
+                  addressForm.get('country')?.touched &&
+                  addressForm.get('country')?.invalid
+                "
+              >
+                2-letter country code required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default Checkbox -->
+        <div class="default-check">
+          <label class="check-label">
+            <input type="checkbox" formControlName="isDefault" />
+            <span>Set as default shipping address</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn-outline-cust" (click)="close()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-gold-cust d-flex align-items-center gap-2"
+          [disabled]="addressForm.invalid || isSubmitting"
+        >
+          <span
+            *ngIf="isSubmitting"
+            class="spinner-border spinner-border-sm"
+            role="status"
+          ></span>
+          <i *ngIf="!isSubmitting" class="bi bi-check2"></i>
+          {{ isEditMode ? "Save Changes" : "Save Address" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

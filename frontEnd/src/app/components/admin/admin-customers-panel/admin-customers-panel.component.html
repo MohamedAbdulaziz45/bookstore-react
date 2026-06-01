@@ -1,0 +1,96 @@
+<div class="admin-panel active d-block">
+  <div class="section-header mb-4">
+    <div class="dash-section-title">Customers</div>
+    <div class="search-wrap">
+      <i class="bi bi-search"></i>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search customers..."
+        [(ngModel)]="search"
+        (ngModelChange)="applySearch()"
+      />
+    </div>
+  </div>
+
+  <div class="data-card">
+    @if (loading) {
+    <div class="admin-state">Loading customers...</div>
+    } @else if (error) {
+    <div class="admin-state error">{{ error }}</div>
+    } @else if (!filteredCustomers.length) {
+    <div class="admin-state">No customers found.</div>
+    } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Orders</th>
+          <th>Total Spent</th>
+          <th>Member Since</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cust of filteredCustomers; track cust.customerId) {
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              @if (cust.imagePath) {
+              <img class="avatar-sm" [src]="cust.imagePath" alt="" />
+              } @else {
+              <div class="avatar-sm">{{ initials(cust) }}</div>
+              }
+              <span style="font-weight:600;font-size:.87rem">{{ cust.displayName }}</span>
+            </div>
+          </td>
+          <td style="color:var(--brand-gray)">{{ cust.email }}</td>
+          <td style="color:var(--brand-gray)">{{ cust.phone || "None" }}</td>
+          <td><span style="font-weight:600">{{ cust.ordersCount }}</span></td>
+          <td style="font-weight:600;color:var(--gold)">{{ formatCurrency(cust.totalSpent) }}</td>
+          <td style="color:var(--brand-gray)">{{ formatDate(cust.memberSince) }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="cust.isDeleted ? 'status-cancelled' : 'status-shipped'">
+              {{ cust.isDeleted ? "Deactivated" : "Active" }}
+            </span>
+          </td>
+          <td>
+            <button class="action-btn edit" type="button" title="View customer" (click)="viewCustomer(cust)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="action-btn del" type="button" title="Deactivate customer" [disabled]="cust.isDeleted" (click)="deactivate(cust)">
+              <i class="bi bi-person-x"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+  </div>
+
+  @if (selectedCustomer) {
+  <div class="admin-modal-backdrop" (click)="closeView()"></div>
+  <div class="admin-drawer">
+    <div class="drawer-header">
+      <div class="dash-section-title">{{ selectedCustomer.displayName }}</div>
+      <button class="action-btn" type="button" title="Close" (click)="closeView()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-row"><span>Email</span><strong>{{ selectedCustomer.email }}</strong></div>
+      <div class="detail-row"><span>Phone</span><strong>{{ selectedCustomer.phone || "None" }}</strong></div>
+      <div class="detail-row"><span>Orders</span><strong>{{ selectedCustomer.ordersCount }}</strong></div>
+      <div class="detail-row"><span>Total spent</span><strong>{{ formatCurrency(selectedCustomer.totalSpent) }}</strong></div>
+      <div class="detail-row"><span>Member since</span><strong>{{ formatDate(selectedCustomer.memberSince) }}</strong></div>
+      <button class="btn-outline-cust mt-3" type="button" [disabled]="selectedCustomer.isDeleted" (click)="deactivate(selectedCustomer)">
+        Deactivate
+      </button>
+    </div>
+  </div>
+  }
+</div>

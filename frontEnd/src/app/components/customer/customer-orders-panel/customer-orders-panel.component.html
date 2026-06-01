@@ -1,0 +1,80 @@
+<div class="section-heading">My Orders</div>
+
+@if (isLoading) {
+  <div class="card-box text-center py-4">
+    <div class="spinner-border text-gold" role="status"></div>
+    <div class="text-muted mt-3">Loading your orders...</div>
+  </div>
+}
+
+@if (!isLoading && orders.length === 0) {
+  <div class="card-box text-center py-4">
+    <div style="font-weight: 800">No orders yet</div>
+    <div class="text-muted mt-1">
+      After checkout, your orders will appear here.
+    </div>
+  </div>
+}
+
+@for (order of orders; track order.orderId) {
+  <div class="order-card">
+    <div class="order-card-header">
+      <div>
+        <div class="order-id">#ORD-{{ order.orderId }}</div>
+        <div class="order-date">
+          {{ order.orderDate | date: "medium" }} ·
+          {{ order.orderItems.length }} item(s)
+        </div>
+      </div>
+      <span
+        class="status-badge"
+        [ngClass]="'status-' + (order.status || '').toLowerCase()"
+        >{{ order.status }}</span
+      >
+    </div>
+
+    <div class="order-card-body">
+      @for (item of order.orderItems; track item.orderItemId) {
+        <div class="order-item">
+          <div class="book-cover-sm">
+            <i class="bi bi-book" style="color: var(--gold)"></i>
+          </div>
+          <div style="flex: 1">
+            <div style="font-weight: 600; font-size: 0.88rem">
+              Book #{{ item.bookId }}
+            </div>
+            <div style="font-size: 0.78rem; color: var(--brand-gray)">
+              Qty: {{ item.quantity }}
+            </div>
+          </div>
+          <div style="font-weight: 700; color: var(--gold)">
+            {{ item.totalItemsPrice.toFixed(2) }} EGP
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="order-card-footer">
+      <div style="font-size: 0.85rem; color: var(--brand-gray)">
+        Total:
+        <strong style="color: var(--brand-dark)"
+          >{{ order.totalAmount.toFixed(2) }} EGP</strong
+        >
+      </div>
+      <div class="d-flex gap-2">
+        <a class="track-btn" [routerLink]="['/orders', order.orderId]">
+          <i class="bi bi-truck"></i> Details
+        </a>
+        @if (order.status === "Pending") {
+          <button
+            class="track-btn"
+            style="border-color: #dc3545; color: #dc3545"
+            (click)="cancel(order)"
+          >
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,15 @@
+<section class="section-py bg-brand">
+  <div class="container">
+    <div class="row g-3 row-cols-2 row-cols-md-4">
+      @for (f of features; track f.title) {
+        <div class="col">
+          <div class="feature-box">
+            <div class="feat-icon" [innerHTML]="f.iconSvg"></div>
+            <h6 class="fw-bold mb-2">{{ f.title }}</h6>
+            <p>{{ f.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

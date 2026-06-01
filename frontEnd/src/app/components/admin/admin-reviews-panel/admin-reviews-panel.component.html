@@ -1,0 +1,89 @@
+<div class="admin-panel active d-block">
+  <div class="section-header mb-4">
+    <div class="dash-section-title">Reviews Management</div>
+    <div class="search-wrap">
+      <i class="bi bi-search"></i>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search reviews..."
+        [(ngModel)]="search"
+        (ngModelChange)="applySearch()"
+      />
+    </div>
+  </div>
+
+  <div class="data-card">
+    @if (loading) {
+    <div class="admin-state">Loading reviews...</div>
+    } @else if (error) {
+    <div class="admin-state error">{{ error }}</div>
+    } @else if (!filteredReviews.length) {
+    <div class="admin-state">No reviews found.</div>
+    } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Book</th>
+          <th>Rating</th>
+          <th>Review</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (rev of filteredReviews; track rev.reviewId) {
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar-sm" style="font-size:.7rem">{{ initials(rev.displayName) }}</div>
+              {{ rev.displayName }}
+            </div>
+          </td>
+          <td style="font-weight:600;font-size:.87rem">#BOOK-{{ rev.bookId }}</td>
+          <td>
+            <div class="stars">
+              @for (filled of getStarsArray(rev.rating); track $index) {
+              <i class="bi" [ngClass]="filled ? 'bi-star-fill' : 'bi-star'"></i>
+              }
+            </div>
+          </td>
+          <td style="color:var(--brand-gray);font-size:.83rem;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+            {{ rev.reviewText }}
+          </td>
+          <td style="color:var(--brand-gray)">{{ formatDate(rev.reviewDate) }}</td>
+          <td>
+            <button class="action-btn edit" type="button" title="View review" (click)="viewReview(rev)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="action-btn del" type="button" title="Delete review" (click)="deleteReview(rev)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+  </div>
+
+  @if (selectedReview) {
+  <div class="admin-modal-backdrop" (click)="closeView()"></div>
+  <div class="admin-modal">
+    <div class="drawer-header">
+      <div class="dash-section-title">Review #{{ selectedReview.reviewId }}</div>
+      <button class="action-btn" type="button" title="Close" (click)="closeView()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-row"><span>Customer</span><strong>{{ selectedReview.displayName }}</strong></div>
+      <div class="detail-row"><span>Book</span><strong>#BOOK-{{ selectedReview.bookId }}</strong></div>
+      <div class="detail-row"><span>Rating</span><strong>{{ selectedReview.rating }}/5</strong></div>
+      <p class="mt-3">{{ selectedReview.reviewText }}</p>
+      <button class="btn-outline-cust mt-3" type="button" (click)="deleteReview(selectedReview)">Delete</button>
+    </div>
+  </div>
+  }
+</div>

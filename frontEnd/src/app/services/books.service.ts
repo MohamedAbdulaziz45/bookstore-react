@@ -1,0 +1,31 @@
+import { Injectable } from '@angular/core';
+import { Book } from '../models/book.model';
+
+@Injectable({ providedIn: 'root' })
+export class BooksService {
+  private allBooks: Book[] = [
+    { id: '1', title: 'Cyber Angel', price: 18.5, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-08.jpg', author: 'John Roberts', category: ['all-books', 'new-arrival'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '2', title: 'Ark Forging', price: 20.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-07.jpg', author: 'John Roberts', category: ['all-books', 'best-seller'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '3', title: '2024 Sanctuary', price: 17.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-06.jpg', author: 'John Roberts', category: ['all-books', 'editors-pick'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '4', title: 'Feugiat Maecenas', price: 14.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-05.jpg', author: 'Grace Bryant', category: ['all-books', 'new-arrival'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '5', title: 'Liar of Dreams', price: 20.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-04.jpg', author: 'Kathryn Moris', category: ['all-books', 'best-seller'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '6', title: 'Mists of Algorab', price: 18.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-02.jpg', author: 'John Roberts', category: ['all-books', 'editors-pick'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '7', title: 'Now You See Me', price: 16.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-03.jpg', author: 'John Roberts', category: ['all-books', 'new-arrival'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '8', title: 'The Born of APLEX', price: 20.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-01.jpg', author: 'Mark Brown', category: ['all-books', 'best-seller'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '9', title: 'Game Of Spades', price: 18.5, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-12.jpg', author: 'Alex Turner', category: ['all-books', 'editors-pick'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '10', title: "I'll Catch You", price: 15.75, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-11.jpg', author: 'Sarah Connor', category: ['all-books', 'new-arrival', 'editors-pick'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '11', title: 'Into The Wild', price: 20.35, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-10.jpg', author: 'Jon Krakauer', category: ['all-books', 'best-seller', 'editors-pick'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { id: '12', title: 'This Dark Road To Mercy', price: 24.0, image: 'https://websitedemos.net/book-store-04/wp-content/uploads/sites/1029/2022/02/book-09.jpg', author: 'Wiley Cash', category: ['all-books', 'editors-pick'], description: 'Justo vestibulum risus imperdiet consectetur consectetur pretium urna augue etiam risus accum san volutpat urna, eu sem per enim, est aliquam laoet urna fringilla viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+  ];
+
+  getAll(): Book[] { return this.allBooks; }
+  searchBooks(query: string): Book[] {
+    const q = query.toLowerCase();
+    return this.allBooks.filter(b => b.title.toLowerCase().includes(q) || b.author?.toLowerCase().includes(q));
+  }
+  getById(id: string): Book | undefined { return this.allBooks.find(b => b.id === id); }
+  getByCategory(cat: string): Book[] { return this.allBooks.filter(b => b.category?.includes(cat)); }
+  getRelated(bookId: string, count = 4): Book[] {
+    return this.allBooks.filter(b => b.id !== bookId).slice(0, count);
+  }
+}
