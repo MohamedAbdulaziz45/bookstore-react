@@ -1,6 +1,6 @@
 # BookStore
 
-BookStore is a full-stack online bookstore application with an ASP.NET Core Web API backend and an Angular frontend. It supports genres, authors, cart management, authentication, checkout, reviews, customer account features
+BookStore is a full-stack online bookstore application with an ASP.NET Core Web API backend and a React frontend. It supports genres, authors, cart management, authentication, checkout, reviews, and customer account features.
 
 ## Features
 
@@ -15,7 +15,6 @@ BookStore is a full-stack online bookstore application with an ASP.NET Core Web 
 - Customer profile and address management.
 - Checkout flow using Stripe.
 - Order tracking and customer orders.
-
 
 ### Admin features
 
@@ -41,23 +40,31 @@ BookStore is a full-stack online bookstore application with an ASP.NET Core Web 
 
 ### Frontend
 
-- Angular 18
-- Standalone components
-- Angular Router lazy-loaded routes
-- Bootstrap 5
-- Bootstrap Icons
+- React 19
+- TypeScript
+- React Router DOM v7
+- Zustand (cart state)
+- Axios
+- React Hook Form + Zod
+- Bootstrap 5 + Bootstrap Icons
+- Lucide React (icons)
+- Sonner (toasts)
+- Framer Motion
+
 
 ## Project structure
 
-- `backEnd/BookStoreApi/BookStoreApi` - ASP.NET Core API host project.
-- `backEnd/BookStore.Application` - commands, queries, DTOs, validators, application services, and MediatR handlers.
-- `backEnd/BookStore.Domain` - entities, constants, exceptions, repository contracts, and views.
-- `backEnd/BookStore.Infrastructure` - EF Core DbContext, migrations, repository implementations, external services, identity, and seed data.
-- `frontEnd` - Angular 18 application.
-- `frontEnd/src/app/pages` - route-level pages.
-- `frontEnd/src/app/components` - reusable UI components.
-- `frontEnd/src/app/services` - API and UI state services.
-- `frontEnd/src/app/models` - frontend TypeScript models and interfaces.
+- `backEnd/BookStoreApi/BookStoreApi` — ASP.NET Core API host project.
+- `backEnd/BookStore.Application` — commands, queries, DTOs, validators, application services, and MediatR handlers.
+- `backEnd/BookStore.Domain` — entities, constants, exceptions, repository contracts, and views.
+- `backEnd/BookStore.Infrastructure` — EF Core DbContext, migrations, repository implementations, external services, identity, and seed data.
+- `frontEnd` — React application.
+- `frontEnd/src/pages` — route-level page components.
+- `frontEnd/src/components` — reusable UI components (including `admin/` and `customer/` subgroups).
+- `frontEnd/src/services` — Axios API service modules and `auth/` subgroup (`authService`, `tokenUtils`, `useAuthStore`).
+- `frontEnd/src/store` — Zustand store (`useCartStore`).
+- `frontEnd/src/types` — TypeScript interfaces and types.
+- `frontEnd/src/utils` — utility helpers (`imageUtils`, `stringUtils`, `toast`).
 
 ## Prerequisites
 
@@ -67,9 +74,8 @@ Install the following before running the project:
 - SQL Server or SQL Server Express / LocalDB
 - Node.js 18+ LTS
 - npm
-- Angular CLI 18, optional if you use `npm run` scripts
-- Stripe account, required for real checkout payments
-- Cloudinary account, required for real image upload/storage features
+- Stripe account — required for real checkout payments
+- Cloudinary account — required for real image upload/storage features
 
 ## Backend setup
 
@@ -96,8 +102,8 @@ Install the following before running the project:
      "Stripe": {
        "SecretKey": "your-stripe-secret-key",
        "WebhookSecret": "your-stripe-webhook-secret",
-       "SuccessUrl": "http://localhost:4200/order-success?session_id={CHECKOUT_SESSION_ID}",
-       "CancelUrl": "http://localhost:4200/checkout"
+       "SuccessUrl": "http://localhost:5173/order-success?session_id={CHECKOUT_SESSION_ID}",
+       "CancelUrl": "http://localhost:5173/checkout"
      },
      "CloudinarySettings": {
        "CloudName": "your-cloudinary-cloud-name",
@@ -138,23 +144,21 @@ Install the following before running the project:
    npm install --prefix frontEnd
    ```
 
-2. Configure the development API base URL in `frontEnd/src/environments/environment.development.ts`:
+2. Configure the development API base URL in `frontEnd/.env.development`:
 
-   ```ts
-   export const environment = {
-     baseUrl: "https://localhost:7097/api"
-   };
+   ```env
+   VITE_API_URL=https://localhost:7097/api
    ```
 
-3. Start the Angular development server:
+3. Start the Vite development server:
 
    ```bash
-   npm --prefix frontEnd start
+   npm --prefix frontEnd run dev
    ```
 
 4. Open the frontend:
 
-   - `http://localhost:4200`
+   - `http://localhost:5173`
 
 ## Useful commands
 
@@ -168,9 +172,10 @@ Install the following before running the project:
 ### Frontend
 
 - Install packages: `npm install --prefix frontEnd`
-- Start dev server: `npm --prefix frontEnd start`
+- Start dev server: `npm --prefix frontEnd run dev`
 - Build production bundle: `npm --prefix frontEnd run build`
-- Run Angular tests: `npm --prefix frontEnd test`
+- Preview production build: `npm --prefix frontEnd run preview`
+- Lint: `npm --prefix frontEnd run lint`
 
 ## API overview
 
@@ -203,9 +208,10 @@ Use Swagger for the complete and current API contract.
 
 - `appsettings.json` contains placeholders only.
 - `appsettings.Development.json` is intended for local development secrets and should stay out of source control.
-- The frontend development environment should point to the backend API URL with `/api` included.
-- For production builds, make sure `frontEnd/src/environments/environment.ts` points to the correct production API base URL.
+- The frontend reads the API base URL from the `VITE_API_URL` environment variable via `import.meta.env.VITE_API_URL`.
+- For production builds, set `VITE_API_URL` in `frontEnd/.env.production` or your deployment environment.
 - Stripe webhooks require the configured webhook secret to match your Stripe CLI or Stripe dashboard endpoint.
+- The Stripe `SuccessUrl` and `CancelUrl` should point to `localhost:5173` in development (Vite's default port), not `localhost:4200`.
 
 ## Build status checked during review
 
@@ -214,14 +220,15 @@ The following checks were run successfully:
 - Backend: `dotnet build backEnd/BookStoreApi/BookStoreApi.sln --no-restore`
 - Frontend: `npm --prefix frontEnd run build`
 
-The backend build completed with a package security warning for `AutoMapper 15.1.0`. The frontend build completed with Angular bundle budget warnings.
+The backend build completed with a package security warning for `AutoMapper 15.1.0`. The frontend build completed with Vite bundle size warnings.
 
 ## Security notes
 
 - Never commit real Stripe keys, Cloudinary secrets, JWT signing secrets, or production connection strings.
 - Rotate any secret that was accidentally committed or shared.
 - Prefer environment variables, user secrets, or deployment secret managers for production.
+- Do not commit `.env.development` or `.env.production` files containing real secrets.
 
 ## License
 
-This project is licensed under the MIT License
+This project is licensed under the MIT License.
