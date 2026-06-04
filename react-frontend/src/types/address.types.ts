@@ -1,0 +1,25 @@
+export interface IAddress {
+  addressId: number;
+  label: string;
+  fullName: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  state?: string;
+  postalCode: string;
+  country: string;
+  isDefault: boolean;
+}
+export interface ICreateAddressRequest {
+  label: string;
+  fullName: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  state?: string;
+  postalCode: string;
+  country: string;
+  isDefault: boolean;
+}

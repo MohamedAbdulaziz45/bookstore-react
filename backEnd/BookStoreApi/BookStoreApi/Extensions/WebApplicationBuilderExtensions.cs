@@ -60,6 +60,14 @@ public static class WebApplicationBuilderExtensions
         // Add CORS policy for Angular
         builder.Services.AddCors(options =>
         {
+            options.AddPolicy("AllowFrontend",
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200", "http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+
             options.AddPolicy("AllowAngular",
                 policy =>
                 {
@@ -67,6 +75,14 @@ public static class WebApplicationBuilderExtensions
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
+
+            options.AddPolicy("AllowReact",
+                 policy =>
+                 {
+                     policy.WithOrigins("http://localhost:5173") 
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                 });
         });
 
         builder.Host.UseSerilog((context, configuration) =>

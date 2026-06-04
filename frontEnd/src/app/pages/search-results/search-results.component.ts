@@ -119,6 +119,8 @@ export class SearchResultsComponent {
         return { sortBy: "Price", sortDirection: "Descending" };
       case "title":
         return { sortBy: "Title", sortDirection: "Ascending" };
+      case "author":
+        return { sortBy: "Author", sortDirection: "Ascending" };
       default:
         return { sortBy: undefined, sortDirection: "Ascending" };
     }

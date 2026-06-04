@@ -35,10 +35,10 @@ import { FormsModule } from "@angular/forms";
           [(ngModel)]="sort"
           (change)="sortChange.emit(sort)"
         >
-          <option value="featured">Featured</option>
+          <option value="title">Title</option>
+          <option value="author">Author</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
-          <option value="title">Title</option>
         </select>
         <button class="btn btn-gold" (click)="submitSearch()">Apply</button>
       </div>
@@ -86,7 +86,7 @@ import { FormsModule } from "@angular/forms";
 export class SearchSummaryComponent implements OnChanges {
   @Input() query = "";
   @Input() resultsCount = 0;
-  @Input() sort = "featured";
+  @Input() sort = "Title";
   @Output() search = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
 

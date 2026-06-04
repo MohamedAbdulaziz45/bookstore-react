@@ -1,0 +1,27 @@
+export interface IBookSummary {
+  id: number;
+  title: string;
+  price: number;
+  image?: string | null;
+  author: string;
+  authorId: number;
+  rating: number;
+  reviewCount: number;
+}
+export interface ibook {
+  id: number;
+  title: string;
+  price: number;
+  image?: string;
+  author: string;
+  authorId: number;
+
+  description?: string;
+  rating?: number;
+  reviewCount: number;
+  categories: IBookCategory[];
+}
+export interface IBookCategory {
+  id: number;
+  name: string;
+}

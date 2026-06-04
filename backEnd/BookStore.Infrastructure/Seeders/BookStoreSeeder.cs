@@ -197,6 +197,7 @@ internal class BookStoreSeeder(BookStoreDBContext dbContext) : IBookStoreSeeder
         new() {  ImageURL = "https://covers.openlibrary.org/b/id/8775170-L.jpg" },
         new() {  ImageURL = "https://covers.openlibrary.org/b/id/8739290-L.jpg" },
         new() {  ImageURL = "https://covers.openlibrary.org/b/id/8314230-L.jpg" },
+        new() { ImageURL = "https://covers.openlibrary.org/b/id/8228800-L.jpg" },
     ];
     }
 
